@@ -15,12 +15,11 @@ namespace OkulApp
 {
     public partial class frmOgrKayit : Form
     {
+        public int Ogrenciid { get; set; }
         public frmOgrKayit()
         {
             InitializeComponent();
-        }
-
-        
+        }     
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -33,6 +32,7 @@ namespace OkulApp
                 var obl = new OgrenciBL();
                 bool sonuc = obl.OgrenciEkle(ogr);
                 MessageBox.Show(sonuc ? "Ekleme Başarılı" : "Ekleme Başarısız!");
+                Temizlik();
             }
             catch (SqlException ex)
             {
@@ -51,7 +51,64 @@ namespace OkulApp
                 MessageBox.Show("Bilinmayen Hata Oluştu!");
             }
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var frm = new frmOgrBul(this);
+                frm.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var obl = new OgrenciBL();
+                MessageBox.Show(obl.OgrenciSil(Ogrenciid) ? "Silme Başarılı" : "Silme Başarısız!");
+                Temizlik();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var ogr = new Ogrenci();
+                ogr.Ad = textBox1.Text.Trim();
+                ogr.Soyad = textBox2.Text.Trim();
+                ogr.Numara = textBox3.Text.Trim();
+                ogr.Ogrenciid = Ogrenciid;
+
+                var obl = new OgrenciBL();
+                MessageBox.Show(obl.OgrenciGuncelle(ogr) ? "Guncelleme Başarılı" : "Guncelleme Başarısız!");
+                Temizlik();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Temizlik()
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            textBox3.Text = "";
+            button3.Enabled = false;
+            button4.Enabled = false;
+        }
     }
+
 
 
     //INTERFACE DERSI
